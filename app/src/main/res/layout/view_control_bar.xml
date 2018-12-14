@@ -22,7 +22,8 @@
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:clickable="true"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="?android:attr/selectableItemBackground"
+    android:focusable="true">
 
     <Switch
         android:id="@+id/switch_board"

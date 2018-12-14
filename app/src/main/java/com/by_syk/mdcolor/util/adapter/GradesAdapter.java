@@ -18,7 +18,7 @@ package com.by_syk.mdcolor.util.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.CardView;
+import androidx.cardview.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,11 +33,11 @@ import com.by_syk.mdcolor.util.Palette;
  * Created by By_syk on 2016-04-01.
  */
 public class GradesAdapter extends BaseAdapter {
-    private Context context = null;
+    private Context context;
 
-    private LayoutInflater layoutInflater = null;
+    private LayoutInflater layoutInflater;
 
-    private Palette palette = null;
+    private Palette palette;
 
     private static class ViewHolder {
         CardView cardView;
@@ -87,10 +87,10 @@ public class GradesAdapter extends BaseAdapter {
             convertView = layoutInflater.inflate(R.layout.list_item_card, parent, false);
 
             viewHolder = new ViewHolder();
-            viewHolder.cardView = (CardView) convertView.findViewById(R.id.card_view);
-            viewHolder.tvGrade = (TextView) convertView.findViewById(R.id.tv_grade);
-            viewHolder.tvHex = (TextView) convertView.findViewById(R.id.tv_hex);
-            viewHolder.ivStar = (ImageView) convertView.findViewById(R.id.iv_star);
+            viewHolder.cardView = convertView.findViewById(R.id.card_view);
+            viewHolder.tvGrade = convertView.findViewById(R.id.tv_grade);
+            viewHolder.tvHex = convertView.findViewById(R.id.tv_hex);
+            viewHolder.ivStar = convertView.findViewById(R.id.iv_star);
 
             convertView.setTag(viewHolder);
         } else {

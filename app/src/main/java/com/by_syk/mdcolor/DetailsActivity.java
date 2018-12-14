@@ -72,7 +72,7 @@ public class DetailsActivity extends BaseActivity {
             actionBar.setTitle(palette.getName());
         }
 
-        lvGrades = (ListView) findViewById(R.id.lv_grades);
+        lvGrades = findViewById(R.id.lv_grades);
 
         gradesAdapter = new GradesAdapter(this, palette);
         lvGrades.setAdapter(gradesAdapter);

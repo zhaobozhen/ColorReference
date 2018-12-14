@@ -35,12 +35,12 @@ import java.util.List;
  * Created by By_syk on 2016-03-31.
  */
 public class MainAdapter extends BaseAdapter {
-    private Context context = null;
-    private LayoutInflater layoutInflater = null;
+    private Context context;
+    private LayoutInflater layoutInflater;
 
-    private List<Palette> dataList = null;
+    private List<Palette> dataList;
 
-    private int checked = -1;
+    private int checked;
 
     private static class ViewHolder {
         TextView tvName;
@@ -99,9 +99,9 @@ public class MainAdapter extends BaseAdapter {
             convertView = layoutInflater.inflate(R.layout.list_item, parent, false);
 
             viewHolder = new ViewHolder();
-            viewHolder.tvName = (TextView) convertView.findViewById(R.id.tv_name);
-            viewHolder.tvHex = (TextView) convertView.findViewById(R.id.tv_hex);
-            viewHolder.ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
+            viewHolder.tvName = convertView.findViewById(R.id.tv_name);
+            viewHolder.tvHex = convertView.findViewById(R.id.tv_hex);
+            viewHolder.ivHead = convertView.findViewById(R.id.iv_head);
 
             convertView.setTag(viewHolder);
         } else {

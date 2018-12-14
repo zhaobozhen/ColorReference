@@ -64,7 +64,7 @@ public class AboutDialog extends DialogFragment {
             isExecuted = true;
 
             // Make the url text clickable.
-            TextView tvMessage = (TextView) getDialog().findViewById(android.R.id.message);
+            TextView tvMessage = getDialog().findViewById(android.R.id.message);
             if (tvMessage != null) {
                 tvMessage.setMovementMethod(LinkMovementMethod.getInstance());
             }

@@ -16,11 +16,17 @@
 
 package com.by_syk.mdcolor;
 
+import androidx.core.app.NotificationCompat;
+import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -101,12 +107,12 @@ public class MainActivity extends BaseActivity {
 
     private void init() {
         viewControlBar = findViewById(R.id.view_control_bar);
-        switchBoard = (Switch) findViewById(R.id.switch_board);
-        fabLucky = (ImageButton) findViewById(R.id.fab_lucky);
+        switchBoard = findViewById(R.id.switch_board);
+        fabLucky = findViewById(R.id.fab_lucky);
 
         // Sets the data behind the ListView.
         mainAdapter = new MainAdapter(this, sp.getInt(C.SP_THEME_COLOR, -1));
-        lvColors = (ListView) findViewById(R.id.lv_colors);
+        lvColors = findViewById(R.id.lv_colors);
         lvColors.setAdapter(mainAdapter);
 
         //lvColors.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -131,7 +137,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.rg_themes);
+        RadioGroup radioGroup = findViewById(R.id.rg_themes);
         radioGroup.check(switchRadioButtonOrderAndId(sp.getInt(C.SP_THEME_STYLE)));
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -292,6 +298,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class LoadColorsTask extends AsyncTask<String, Integer, List<Palette>> {
         @Override
         protected List<Palette> doInBackground(String... params) {
@@ -354,24 +361,33 @@ public class MainActivity extends BaseActivity {
         getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
         int primaryColor = typedValue.data;
 
-        Notification.Builder builder = new Notification.Builder(this)
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String CHANNEL_ID = "noti_channel";
+            CharSequence name = "通知栏";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            mChannel.enableLights(true);
+            mChannel.setLightColor(Color.RED);
+            mChannel.setShowBadge(false);
+            manager.createNotificationChannel(mChannel);
+        }
+
+        Notification notification = new NotificationCompat.Builder(this, "noti_channel")
+                .setContentTitle(getString(R.string.notify_content))
                 .setSmallIcon(R.drawable.ic_notify_pantone)
                 //.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                 .setColor(primaryColor)
                 .setPriority(Notification.PRIORITY_LOW)
                 .setAutoCancel(true)
-                .setFullScreenIntent(PendingIntent.getActivity(this, 0, new Intent(), 0), false);
-        if (C.SDK >= 24) {
-            builder.setContentTitle(getString(R.string.notify_content));
-        } else {
-            builder.setContentTitle(getString(R.string.notify_title));
-            builder.setContentText(getString(R.string.notify_content));
-        }
+                .setFullScreenIntent(PendingIntent.getActivity(this, 0, new Intent(), 0), false)
+                .build();
 
         if (notificationManager == null) {
             notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         }
-        notificationManager.notify(1, builder.build());
+        notificationManager.notify(1, notification);
     }
 
     private void cancelNotification() {
